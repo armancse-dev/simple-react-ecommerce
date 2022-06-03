@@ -18,21 +18,36 @@ const Shop = () => {
       });
    }, []);
 
-   useEffect(() => {
-      console.log('Local storeage called');
-      if(products.length){
-         const savedCart = getStoredCart();
-         const storedCart = [];
-         for (const key in savedCart){
+   // useEffect(() => {
+   //    console.log('Local storeage called');
+   //    if(products.length){
+   //       const savedCart = getStoredCart();
+   //       const storedCart = [];
+   //       for (const key in savedCart){
            
-            const addedProduct  = products.find( product => product.key === key);
-            storedCart.push(addedProduct);
-            // console.log(key, addedProduct);
-         }
-         // setCart(storedCart);
-      }
+   //          const addedProduct  = products.find( product => product.key === key);
+   //          storedCart.push(addedProduct);
+   //          // console.log(key, addedProduct);
+   //       }
+   //       // setCart(storedCart);
+   //    }
      
-   }, [products]);
+   // }, [products]);
+
+   useEffect( () =>{
+      const storedCart = getStoredCart();
+      const savedCart = [];
+      for(const id in storedCart){
+          const addedProduct = products.find(product => product.id === id);
+          if(addedProduct){
+            
+              const quantity = storedCart[id];
+              addedProduct.quantity = quantity;
+              savedCart.push(addedProduct);
+          }
+      }
+      setCart(savedCart);
+  }, [products])
 
    const handleAddToCart = (product) => {
       const newCart = [...cart, product];
