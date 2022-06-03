@@ -7,6 +7,8 @@ import './Shop.css'
 const Shop = () => {
    const [products, setProducts] = useState([]);
    const [cart, setCart] = useState([]);
+
+   const [displayProducts, setDisplayProducts] = useState([]);
    
    useEffect( ()=>{
       console.log('Product api called');
@@ -14,25 +16,9 @@ const Shop = () => {
       .then(res => res.json())
       .then(data => {
          setProducts(data);
-         console.log('Products recived');
+         setDisplayProducts(data);
       });
    }, []);
-
-   // useEffect(() => {
-   //    console.log('Local storeage called');
-   //    if(products.length){
-   //       const savedCart = getStoredCart();
-   //       const storedCart = [];
-   //       for (const key in savedCart){
-           
-   //          const addedProduct  = products.find( product => product.key === key);
-   //          storedCart.push(addedProduct);
-   //          // console.log(key, addedProduct);
-   //       }
-   //       // setCart(storedCart);
-   //    }
-     
-   // }, [products]);
 
    useEffect( () =>{
       const storedCart = getStoredCart();
@@ -56,24 +42,40 @@ const Shop = () => {
       //save to localStorage for Now
       addToDb(product.id);
  }
-   return (
-      <div className='shop-container'>
-         <div className="product-container">
-            
-            {
-               products.map(product => <Product 
-               key={product.id}
-               product={product}
-               handleAddToCart={handleAddToCart}
-               >
 
-               </Product>)
-            }
+   const handleSearch = event =>{
+      const searchText =  event.target.value;
+      const matchedProducts = products.filter(product => product.name.toLowerCase().includes(searchText.toLowerCase()))
+      setDisplayProducts(matchedProducts);
+      
+
+   }
+   return (
+      <div>
+         <div className="search-contariner">
+            <input 
+            type="text" 
+            onChange={handleSearch}
+            placeholder='Search Product' />
          </div>
-         <div className="cart-container">
-            <Cart cart={cart} ></Cart>
+         <div className='shop-container'>
+            <div className="product-container">
+               
+               {
+                  displayProducts.map(product => <Product 
+                  key={product.id}
+                  product={product}
+                  handleAddToCart={handleAddToCart}
+                  >
+
+                  </Product>)
+               }
+            </div>
+            <div className="cart-container">
+               <Cart cart={cart} ></Cart>
+            </div>
+            
          </div>
-         
       </div>
    );
 };
