@@ -11,19 +11,8 @@ const useProducts = () =>{
 
    }, []);
    //return necessary things
-   return [products];
+   return [products, setProducts];
 
 }
 export default useProducts;
 
-// import React from 'react';
-
-// const useProducts = () => {
-//    return (
-//       <div>
-         
-//       </div>
-//    );
-// };
-
-// export default useProducts;
